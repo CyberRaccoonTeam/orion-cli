@@ -59,6 +59,16 @@ ollama pull qwen2.5-coder:7b
 - User-friendly GUI
 - Supports many model formats (GGUF, etc.)
 
+> **⚠️ IMPORTANT:** LM Studio requires manual model loading!  
+> Unlike Ollama, LM Studio does NOT automatically load models via API.  
+> **Before using Orion**, you MUST:  
+> 1. Open the LM Studio interface  
+> 2. Go to "Developer" or "Local Server" tab  
+> 3. Manually load your desired model (e.g., `meta-llama-3-8b-instruct`)  
+> 4. Wait for 100% loading completion  
+>   
+> If no model is loaded, LM Studio will default to the first model alphabetically, which may not be the one configured in Orion.
+
 **Installation:**
 1. Download from https://lmstudio.ai
 2. Launch LM Studio and load a model

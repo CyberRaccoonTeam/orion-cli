@@ -580,6 +580,13 @@ def cmd_provider(args: str, ctx: dict) -> str:
         
         if success:
             renderer.get_console().print(f"[green]✓ {message}[/]\n")
+            # Important warning about LM Studio model loading
+            configured_model = settings.get("model", "unknown")
+            renderer.get_console().print(f"[yellow]⚠ IMPORTANT:[/] LM Studio requires manual model loading!")
+            renderer.get_console().print(f"[dim]   1. Open LM Studio interface[/]")
+            renderer.get_console().print(f"[dim]   2. Load '{configured_model}' in the 'Developer' tab[/]")
+            renderer.get_console().print(f"[dim]   3. Wait for 100% loading before using Orion[/]")
+            renderer.get_console().print(f"[dim]   Otherwise, LM Studio may use a different model by default.[/]\n")
         else:
             renderer.get_console().print(f"[red]✗ {message}[/]")
             renderer.get_console().print("[yellow]Provider set, but may not work until LM Studio is running.[/]\n")
