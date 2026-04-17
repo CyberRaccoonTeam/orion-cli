@@ -331,6 +331,10 @@ class OrionREPL:
         thinking_buffer = ""
         response_buffer = ""
 
+        # Print the ORION: prefix before streaming starts
+        console.print()
+        console.print(Text("ORION: ", style=f"bold {colors['primary']}"), end="")
+
         # Un seul contexte Live qui change de contenu selon la phase
         with Live(Text(""), console=console, refresh_per_second=20) as live:
             def on_thinking(token: str) -> None:
