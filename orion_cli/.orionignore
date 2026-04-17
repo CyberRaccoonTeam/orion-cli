@@ -1,0 +1,41 @@
+# Orion CLI — Ignore patterns (same syntax as .gitignore)
+# Files/directories matching these patterns are excluded from context injection (@path)
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Secrets
+.env
+.env.*
+*.key
+*.pem
+secrets.json
+credentials.json
+
+# Large files / binary
+*.bin
+*.exe
+*.dll
+*.so
+*.dylib
+*.zip
+*.tar.gz
+*.rar
+node_modules/

@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Logs
+*.log
+logs/
+
+# Config (user-specific)
+config.local.toml
+*.db
+*.sqlite
+
+# Orion Internal Files (don't commit personal memory/sessions)
+ORION.md
+orion_cli/IDENTITY.md
+.orion/
+todo-list
+**/settings.json
+~/.config/orion/sessions/
+~/.config/orion/checkpoints/
+
+# Documentation builds
+docs/_build/
+site/
+
+# OS
+Thumbs.db
+.directory
