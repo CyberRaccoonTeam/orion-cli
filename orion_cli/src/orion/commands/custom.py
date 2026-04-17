@@ -127,11 +127,11 @@ def create_example_command(target_dir: Path, name: str = "example") -> Path:
     toml_path = toml_path / f"{parts[-1]}.toml"
     toml_path.parent.mkdir(parents=True, exist_ok=True)
 
-    content = '''description = "Exemple de commande personnalisée"
-args_description = "Texte optionnel à inclure"
+    content = '''description = "Example custom command"
+args_description = "Optional text to include"
 
 prompt = """
-Tu es un assistant expert. Réponds de manière concise et précise.
+You are an expert assistant. Respond concisely and precisely.
 
 {{input}}
 """

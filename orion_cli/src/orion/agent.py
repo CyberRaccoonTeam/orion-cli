@@ -39,11 +39,11 @@ from orion.tools import build_tools
 from orion.ui import renderer
 
 
-# Fallback si IDENTITY.md est introuvable
+# Fallback if IDENTITY.md is not found
 _DEFAULT_IDENTITY = """You are Orion, a powerful AI agent running locally via Ollama.
 Be direct, technical, honest, and proactive. Use tools to verify before answering.
 Complete all required steps of a task before returning control to the user.
-Respond in the user's language."""
+Always respond in English unless the user explicitly asks for another language."""
 
 SYSTEM_PROMPT_TEMPLATE = """{identity}
 
@@ -56,8 +56,8 @@ You have access to tools to:
 - Plan and track todos
 
 After using a tool, always confirm what you did and present the result clearly in your response.
-Example: "J'ai exécuté `ls -la src/` — voici le résultat : ..."
-Example: "Fichier `config.py` lu. Voici son contenu : ..."
+Example: "I executed `ls -la src/` — here is the result: ..."
+Example: "File `config.py` read. Here is its content: ..."
 Keep confirmations brief and factual, consistent with your direct personality.
 
 {memory_context}
