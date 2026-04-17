@@ -32,28 +32,34 @@ Orion CLI is a powerful terminal-based interface that connects to AI models from
 
 ### Prerequisites
 
-- **Python 3.10+**
+- **Python 3.10+** - Check your version: `python3 --version`
 - **Ollama** (for local models) - [Install Ollama](https://ollama.ai)
+- **Git** - For cloning the repository
 
 ### Installation
 
 ```bash
-# 1. Install Ollama and pull a model
+# 1. Verify Python version (must be 3.10+)
+python3 --version
+
+# 2. Install Ollama and pull a model
 curl -fsSL https://ollama.ai/install.sh | sh
 ollama pull qwen2.5-coder:7b
 
-# 2. Clone and install Orion
-git clone https://github.com/yourusername/project_orion.git
-cd project_orion/orion_cli
+# 3. Clone and install Orion
+git clone https://github.com/CyberRaccoonTeam/orion-cli.git
+cd orion-cli/orion_cli
 
-# 3. Set up Python environment
+# 4. Set up Python environment
 python3 -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -e .
 
-# 4. Launch Orion
+# 5. Launch Orion
 python main.py
 ```
+
+> **💡 Tip**: Don't have Ollama installed? You can also use LM Studio, OpenAI, or Anthropic. See [Provider Setup](orion_cli/docs/PROVIDERS.md) for alternatives.
 
 ### First Commands
 
