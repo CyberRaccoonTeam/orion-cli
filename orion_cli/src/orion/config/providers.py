@@ -21,6 +21,9 @@ def get_llm(settings: Any) -> BaseChatModel:
     """
     Factory function to instantiate the appropriate LLM based on provider settings.
     
+    Supports thinking_mode (off/low/medium/high) for reasoning models.
+    When thinking_mode is active, reasoning parameters are passed to the LLM.
+    
     Args:
         settings: Settings object with get() method
         
@@ -31,20 +34,21 @@ def get_llm(settings: Any) -> BaseChatModel:
         ValueError: If provider is not supported or required dependencies are missing
     """
     provider = settings.get("llm_provider", "ollama")
+    thinking_mode = settings.get("thinking_mode", "off")
     
     if provider == LLMProvider.OLLAMA:
-        return _get_ollama_llm(settings)
+        return _get_ollama_llm(settings, thinking_mode)
     elif provider == LLMProvider.LMSTUDIO:
-        return _get_lmstudio_llm(settings)
+        return _get_lmstudio_llm(settings, thinking_mode)
     elif provider == LLMProvider.OPENAI:
-        return _get_openai_llm(settings)
+        return _get_openai_llm(settings, thinking_mode)
     elif provider == LLMProvider.ANTHROPIC:
-        return _get_anthropic_llm(settings)
+        return _get_anthropic_llm(settings, thinking_mode)
     else:
         raise ValueError(f"Unsupported LLM provider: {provider}")
 
 
-def _get_ollama_llm(settings: Any) -> BaseChatModel:
+def _get_ollama_llm(settings: Any, thinking_mode: str = "off") -> BaseChatModel:
     """Create ChatOllama instance."""
     try:
         from langchain_ollama import ChatOllama
@@ -54,14 +58,21 @@ def _get_ollama_llm(settings: Any) -> BaseChatModel:
             "Install it with: pip install langchain-ollama"
         )
     
-    return ChatOllama(
+    kwargs = dict(
         model=settings.get("model", "qwen2.5-coder:14b"),
         temperature=float(settings.get("model_temperature", 0.7)),
         num_ctx=int(settings.get("model_context_length", 8192)),
     )
+    
+    # Ollama: thinking models use num_predict for reasoning budget
+    if thinking_mode != "off":
+        thinking_budget = {"low": 1024, "medium": 4096, "high": 16384}.get(thinking_mode, 4096)
+        kwargs["num_predict"] = thinking_budget
+    
+    return ChatOllama(**kwargs)
 
 
-def _get_lmstudio_llm(settings: Any) -> BaseChatModel:
+def _get_lmstudio_llm(settings: Any, thinking_mode: str = "off") -> BaseChatModel:
     """Create ChatOpenAI instance configured for LM Studio."""
     try:
         from langchain_openai import ChatOpenAI
@@ -75,16 +86,22 @@ def _get_lmstudio_llm(settings: Any) -> BaseChatModel:
     api_key = settings.get("lmstudio_api_key", "lm-studio")
     model = settings.get("model", "local-model")
     
-    return ChatOpenAI(
+    kwargs = dict(
         base_url=base_url,
         api_key=api_key,
         model=model,
         temperature=float(settings.get("model_temperature", 0.7)),
         max_tokens=int(settings.get("model_context_length", 8192)),
     )
+    
+    # LM Studio: pass reasoning_effort if supported
+    if thinking_mode != "off":
+        kwargs["model_kwargs"] = {"reasoning_effort": thinking_mode}
+    
+    return ChatOpenAI(**kwargs)
 
 
-def _get_openai_llm(settings: Any) -> BaseChatModel:
+def _get_openai_llm(settings: Any, thinking_mode: str = "off") -> BaseChatModel:
     """Create ChatOpenAI instance for OpenAI API."""
     try:
         from langchain_openai import ChatOpenAI
@@ -102,15 +119,26 @@ def _get_openai_llm(settings: Any) -> BaseChatModel:
     
     model = settings.get("model", "gpt-4o")
     
-    return ChatOpenAI(
+    # OpenAI: use reasoning models when thinking is on
+    if thinking_mode != "off":
+        reasoning_models = {"low": "o3-mini", "medium": "o3-mini", "high": "o3"}
+        model = reasoning_models.get(thinking_mode, "o3-mini")
+    
+    kwargs = dict(
         api_key=api_key,
         model=model,
         temperature=float(settings.get("model_temperature", 0.7)),
         max_tokens=int(settings.get("model_context_length", 8192)),
     )
+    
+    # OpenAI reasoning models use reasoning_effort parameter
+    if thinking_mode != "off":
+        kwargs["model_kwargs"] = {"reasoning_effort": thinking_mode}
+    
+    return ChatOpenAI(**kwargs)
 
 
-def _get_anthropic_llm(settings: Any) -> BaseChatModel:
+def _get_anthropic_llm(settings: Any, thinking_mode: str = "off") -> BaseChatModel:
     """Create ChatAnthropic instance for Anthropic/Claude API."""
     try:
         from langchain_anthropic import ChatAnthropic
@@ -128,12 +156,24 @@ def _get_anthropic_llm(settings: Any) -> BaseChatModel:
     
     model = settings.get("model", "claude-3-5-sonnet-20241022")
     
-    return ChatAnthropic(
+    kwargs = dict(
         api_key=api_key,
         model=model,
         temperature=float(settings.get("model_temperature", 0.7)),
         max_tokens=int(settings.get("model_context_length", 8192)),
     )
+    
+    # Anthropic: enable extended thinking when mode is on
+    if thinking_mode != "off":
+        thinking_budget = {"low": 4096, "medium": 16384, "high": 32768}.get(thinking_mode, 16384)
+        kwargs["model_kwargs"] = {
+            "thinking": {
+                "type": "enabled",
+                "budget_tokens": thinking_budget,
+            }
+        }
+    
+    return ChatAnthropic(**kwargs)
 
 
 def list_available_models(settings: Any) -> list[str]:

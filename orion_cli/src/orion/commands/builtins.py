@@ -773,6 +773,65 @@ def cmd_model(args: str, ctx: dict) -> str:
     return f"✓ Switched to model: `{target_model}`\nProvider: `{current_provider}`\n\n[dim]Send a message to start using the new model.[/]"
 
 
+# ─── /thinking_mode ──────────────────────────────────────────────────────────
+
+THINKING_LEVELS = {"off", "low", "medium", "high"}
+
+def cmd_thinking_mode(args: str, ctx: dict) -> str:
+    """Configure reasoning/thinking mode for AI responses."""
+    settings = ctx["settings"]
+    current_level = settings.get("thinking_mode", "off")
+    current_provider = settings.get("llm_provider", "ollama")
+    current_model = settings.get("model", "unknown")
+    
+    # No args: show current status
+    if not args.strip():
+        lines = [f"**Thinking Mode: `{current_level}`**\n"]
+        lines.append("**Levels:**")
+        for level in ["off", "low", "medium", "high"]:
+            marker = " ← current" if level == current_level else ""
+            desc = {
+                "off": "No reasoning (fastest, cheapest)",
+                "low": "Basic reasoning, quick responses",
+                "medium": "Balanced reasoning and speed",
+                "high": "Deep reasoning (slowest, most tokens)",
+            }.get(level, "")
+            lines.append(f"  - `{level}` — {desc}{marker}")
+        
+        lines.append(f"\n**Provider:** `{current_provider}`")
+        lines.append(f"**Model:** `{current_model}`")
+        lines.append(f"\n**Usage:**")
+        lines.append(f"  `/thinking_mode <off|low|medium|high>`")
+        lines.append(f"  `/thinking_mode on` — alias for medium")
+        lines.append(f"  `/thinking_mode off` — disable reasoning")
+        return "\n".join(lines)
+    
+    level = args.strip().lower()
+    
+    # Handle aliases
+    if level == "on":
+        level = "medium"
+    elif level not in THINKING_LEVELS:
+        return f"Invalid level: `{level}`\nValid options: {', '.join(f'`{l}`' for l in THINKING_LEVELS)}"
+    
+    # Update setting
+    settings.set("thinking_mode", level)
+    
+    # Force agent reset
+    if "agent" in ctx:
+        ctx["agent"]._llm = None
+    
+    if level == "off":
+        return f"✓ Thinking mode: **off**\nModel: `{current_model}`"
+    else:
+        return (
+            f"✓ Thinking mode: **{level}**\n"
+            f"Model: `{current_model}`\n"
+            f"Provider: `{current_provider}`\n"
+            f"\n[dim]Reasoning parameters will be applied on next message.[/]"
+        )
+
+
 # ─── /editor ────────────────────────────────────────────────────────────────
 
 def cmd_editor(args: str, ctx: dict) -> str:
@@ -817,6 +876,7 @@ def build_registry() -> CommandRegistry:
         Command("restore", [], "Restore files from checkpoint", "/restore [list|undo|<id>]", cmd_restore),
         Command("extensions", [], "List active extensions", "/extensions", cmd_extensions),
         Command("editor", [], "Select default editor", "/editor [name]", cmd_editor),
+        Command("thinking_mode", ["thinking", "think"], "Configure reasoning mode (off/low/medium/high)", "/thinking_mode [off|low|medium|high|on]", cmd_thinking_mode),
     ]
 
     for cmd in commands:
