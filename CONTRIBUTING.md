@@ -1,96 +1,128 @@
-# Contributing to Orion
+# Contributing to Orion CLI
 
-Thank you for considering contributing to Orion! 🎉
+First off — thanks for being here. Whether you're fixing a typo or adding a major feature, every contribution matters.
 
-## 📋 Table of Contents
+## Quick Start
 
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [Code Style](#code-style)
-- [Testing](#testing)
-- [Submitting Changes](#submitting-changes)
+```bash
+# 1. Fork and clone
+git clone https://github.com/YOUR_USERNAME/orion-cli.git
+cd orion-cli
 
-## Code of Conduct
+# 2. Set up environment
+python3 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -e ".[dev]"
 
-This project adheres to a code of conduct. By participating, you are expected to uphold this code.
+# 3. Run tests
+cd orion_cli
+pytest
 
-## Getting Started
-
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/project_orion.git`
-3. Create a feature branch: `git checkout -b feature/amazing-feature`
-4. Make your changes
-5. Commit your changes: `git commit -m 'Add amazing feature'`
-6. Push to the branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
+# 4. Run Orion
+python main.py
+```
 
 ## Development Setup
 
-```bash
-# Clone the repo
-git clone https://github.com/yourusername/project_orion.git
-cd project_orion/orion_cli
+### Prerequisites
+- Python 3.10+
+- Ollama (for local model testing)
+- Git
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install development dependencies
-pip install -e ".[dev]"
-
-# Install pre-commit hooks
-pre-commit install
+### Project Structure
+```
+orion-cli/
+├── orion_cli/           # Main application
+│   ├── src/orion/       # Source code
+│   │   ├── agent.py     # LangGraph ReAct agent
+│   │   ├── repl.py      # Interactive REPL
+│   │   ├── commands/    # Slash commands
+│   │   ├── tools/       # LangChain tools
+│   │   ├── config/      # Settings & providers
+│   │   ├── memory/      # ORION.md system
+│   │   ├── session/     # Conversation persistence
+│   │   ├── mcp/         # Model Context Protocol
+│   │   └── ui/          # Rich rendering & themes
+│   └── tests/           # Test suite
+├── langchain_core/      # LangChain stubs (local dev)
+├── langchain_ollama/    # Ollama integration
+└── langgraph_local_stub/ # LangGraph stubs
 ```
 
-## Code Style
+## Making Changes
 
-We use:
-- **Black** for code formatting
-- **Ruff** for linting
-- **MyPy** for type checking
+### Code Style
+- **Formatting:** Black (line-length: 100)
+- **Linting:** Ruff
+- **Type hints:** Encouraged but not required
+- **Language:** Code and comments in English. Variable names must be in English.
 
-Run before committing:
-
-```bash
-# Format code
-black src/ tests/
-
-# Lint
-ruff check src/ tests/
-
-# Type check
-mypy src/
+### Commit Messages
+Keep them clear and descriptive:
+```
+feat: add OpenAI streaming support
+fix: handle missing Ollama connection gracefully
+docs: update provider setup guide
 ```
 
-## Testing
+### Testing
+- Run tests before submitting: `pytest`
+- Add tests for new features
+- All tests must pass (currently 84/84 ✅)
+- Use `pytest --cov=src/orion` for coverage
 
-Write tests for all new features:
+### Before Submitting a PR
+1. ✅ All tests pass
+2. ✅ Code is formatted (`black src/ tests/`)
+3. ✅ No lint errors (`ruff check src/ tests/`)
+4. ✅ New features have tests
+5. ✅ README updated if needed
 
-```bash
-# Run all tests
-pytest
+## Reporting Issues
 
-# Run with coverage
-pytest --cov=src/orion
+### Bug Reports
+Please include:
+- Python version (`python3 --version`)
+- OS
+- Steps to reproduce
+- Expected vs actual behavior
+- Error output (if any)
 
-# Run specific test file
-pytest tests/test_chat.py
+### Feature Requests
+- Describe the problem you're trying to solve
+- Explain why existing features don't cover it
+- Suggest a solution (optional but helpful)
+
+## Adding New Tools
+
+Tools are LangChain tools in `orion_cli/src/orion/tools/`:
+
+```python
+from langchain_core.tools import tool
+
+@tool
+def my_new_tool(param: str) -> str:
+    """Brief description of what the tool does."""
+    # Implementation
+    return result
 ```
 
-## Submitting Changes
+Register it in `orion_cli/src/orion/tools/__init__.py`.
 
-1. Ensure all tests pass
-2. Update documentation if needed
-3. Follow commit message conventions:
-   - `feat:` for new features
-   - `fix:` for bug fixes
-   - `docs:` for documentation
-   - `refactor:` for code refactoring
-   - `test:` for test updates
+## Adding New Providers
 
-Example: `feat: add support for multimodal inputs`
+Providers are in `orion_cli/src/orion/config/providers.py`:
+
+1. Add provider config class
+2. Add to the provider factory function
+3. Add tests in `orion_cli/tests/test_providers.py`
+4. Update `orion_cli/docs/PROVIDERS.md`
 
 ## Questions?
 
-Open an issue on [GitHub Issues](https://github.com/yourusername/project_orion/issues) or start a discussion in [GitHub Discussions](https://github.com/yourusername/project_orion/discussions)!
+- **Issues:** [GitHub Issues](https://github.com/CyberRaccoonTeam/orion-cli/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/CyberRaccoonTeam/orion-cli/discussions)
+
+---
+
+Licensed under MIT. By contributing, you agree your code is also MIT licensed.

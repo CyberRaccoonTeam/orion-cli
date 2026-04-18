@@ -10,6 +10,27 @@ Orion CLI is a powerful terminal-based interface that connects to AI models from
 
 ---
 
+## 🤔 Why Orion?
+
+**The short answer:** Because your code shouldn't leave your machine.
+
+Gemini CLI sends your code to Google. Claude Code sends it to Anthropic. GitHub Copilot sends it to Microsoft. Orion runs **locally** with Ollama — your code, your machine, your rules.
+
+| Feature | Orion | Claude Code | Gemini CLI | GitHub Copilot |
+|---------|-------|-------------|------------|----------------|
+| **Local models** | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **Offline mode** | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **Privacy** | ✅ 100% local | ⚠️ Cloud | ⚠️ Cloud | ⚠️ Cloud |
+| **No API key needed** | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **Multiple providers** | ✅ 4+ | ❌ 1 | ❌ 1 | ❌ 1 |
+| **Open source** | ✅ MIT | ❌ Proprietary | ✅ Apache 2.0 | ❌ Proprietary |
+| **File injection** | ✅ @syntax | ✅ | ✅ | ✅ |
+| **MCP support** | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
+
+Built by a self-taught developer who got tired of sending code to the cloud. Orion proves you don't need a big tech budget or a CS degree to build something useful.
+
+---
+
 ## ✨ Features
 
 - 🖥️ **Terminal-Based Interface** - Full-featured CLI with interactive REPL
@@ -315,7 +336,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ```bash
 # Fork and clone
-git clone https://github.com/yourusername/project_orion.git
+git clone https://github.com/YOUR_USERNAME/orion-cli.git
 cd project_orion/orion_cli
 
 # Set up development environment
@@ -350,9 +371,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/project_orion/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/project_orion/discussions)
-- 📧 **Email**: your-email@example.com
+- 🐛 **Issues**: [GitHub Issues](https://github.com/CyberRaccoonTeam/orion-cli/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/CyberRaccoonTeam/orion-cli/discussions)
 
 ---
 
