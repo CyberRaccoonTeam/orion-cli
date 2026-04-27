@@ -54,7 +54,10 @@ Built by a self-taught developer who got tired of sending code to the cloud. Ori
 ### Prerequisites
 
 - **Python 3.10+** - Check your version: `python3 --version`
-- **Ollama** (for local models) - [Install Ollama](https://ollama.ai)
+- *Provider: *Ollama** (for local models) - [Install Ollama](https://ollama.ai)
+- *Provider: *LM Studio** (for local models) - [Install LM Studio](https://lmstudio.ai)
+- *Provider: *OpenAI** (API Key needed) - https://openai.com
+- *Provider: *Anthropic** (API Key needed) - https://claude.ai
 - **Git** - For cloning the repository
 
 ### Installation
